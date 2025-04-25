@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GitHub Code Finder</title>
+  <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>GitHub Code Finder</h1>
+    <p>Search for code snippets and repositories on GitHub</p>
+  </header>
+
+  <main>
+    <form id="searchForm" th:action="@{/search}" th:object="${searchRequest}" method="post">
+      <div class="search-container">
+        <input type="text" th:field="*{query}" id="searchInput" placeholder="Enter code snippet or keyword" required>
+        <select th:field="*{language}" id="languageSelect">
+          <option value="">All Languages</option>
+          <option value="java">Java</option>
+          <option value="javascript">JavaScript</option>
+          <option value="python">Python</option>
+          <option value="c">C</option>
+          <option value="cpp">C++</option>
+          <option value="csharp">C#</option>
+          <option value="go">Go</option>
+          <option value="ruby">Ruby</option>
+          <option value="php">PHP</option>
+          <option value="swift">Swift</option>
+        </select>
+        <button type="submit">Search</button>
+      </div>
+    </form>
+
+    <div class="features">
+      <div class="feature">
+        <h3>Find Code Examples</h3>
+        <p>Search for specific code snippets across GitHub repositories</p>
+      </div>
+      <div class="feature">
+        <h3>Filter by Language</h3>
+        <p>Narrow your search to specific programming languages</p>
+      </div>
+      <div class="feature">
+        <h3>Quick Preview</h3>
+        <p>View code snippets directly in search results</p>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 GitHub Code Finder | Powered by GitHub API</p>
+  </footer>
+</div>
+
+<script th:src="@{/js/script.js}"></script>
+</body>
+</html>

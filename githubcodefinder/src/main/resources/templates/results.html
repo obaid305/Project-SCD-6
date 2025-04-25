@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results - GitHub Code Finder</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>GitHub Code Finder</h1>
+        <p>Search for code snippets and repositories on GitHub</p>
+    </header>
+
+    <main>
+        <form id="searchForm" th:action="@{/search}" th:object="${searchRequest}" method="post">
+            <div class="search-container">
+                <input type="text" th:field="*{query}" id="searchInput" placeholder="Enter code snippet or keyword" required>
+                <select th:field="*{language}" id="languageSelect">
+                    <option value="">All Languages</option>
+                    <option value="java">Java</option>
+                    <option value="javascript">JavaScript</option>
+                    <option value="python">Python</option>
+                    <option value="c">C</option>
+                    <option value="cpp">C++</option>
+                    <option value="csharp">C#</option>
+                    <option value="go">Go</option>
+                    <option value="ruby">Ruby</option>
+                    <option value="php">PHP</option>
+                    <option value="swift">Swift</option>
+                </select>
+                <button type="submit">Search</button>
+            </div>
+        </form>
+
+        <div class="results-summary">
+            <h2>Search Results</h2>
+            <p th:if="${results.empty}">No results found. Try a different search query.</p>
+            <p th:unless="${results.empty}" th:text="${'Found ' + results.size() + ' results for: ' + searchRequest.query}"></p>
+        </div>
+
+        <div class="results-container" th:if="${!results.empty}">
+            <div class="result-item" th:each="item : ${results}">
+                <div class="result-header">
+                    <h3>
+                        <a th:href="${item.repository.htmlUrl}" target="_blank" th:text="${item.repository.fullName}"></a> /
+                        <a th:href="${item.htmlUrl}" target="_blank" th:text="${item.path}"></a>
+                    </h3>
+                </div>
+                <div class="result-body">
+                    <pre class="code-snippet" th:text="${item.getCodeSnippet()}"></pre>
+                </div>
+                <div class="result-footer">
+                    <a th:href="${item.htmlUrl}" target="_blank" class="view-btn">View on GitHub</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="back-link">
+            <a th:href="@{/}">Back to Search</a>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 GitHub Code Finder | Powered by GitHub API</p>
+    </footer>
+</div>
+
+<script th:src="@{/js/script.js}"></script>
+</body>
+</html>

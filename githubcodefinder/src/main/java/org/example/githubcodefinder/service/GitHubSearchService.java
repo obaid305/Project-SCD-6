@@ -1,4 +1,5 @@
 package org.example.githubcodefinder.service;
+
 import org.example.githubcodefinder.model.CodeItem;
 import org.example.githubcodefinder.model.SearchResponse;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,8 +9,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -39,15 +41,17 @@ public class GitHubSearchService {
             searchQuery += " language:" + language;
         }
 
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(githubApiUrl + "/search/code")
-                .queryParam("q", searchQuery)
-                .queryParam("per_page", 10);
+        // Encode the full search query properly
+        String encodedQuery = URLEncoder.encode(searchQuery, StandardCharsets.UTF_8);
+
+        // Build full URL manually
+        String url = githubApiUrl + "/search/code?q=" + encodedQuery + "&per_page=10";
 
         HttpEntity<?> entity = new HttpEntity<>(headers);
 
         try {
             ResponseEntity<SearchResponse> response = restTemplate.exchange(
-                    builder.toUriString(),
+                    url,
                     HttpMethod.GET,
                     entity,
                     SearchResponse.class
